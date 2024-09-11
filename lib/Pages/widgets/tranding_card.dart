@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TrandingCard extends StatelessWidget {
-  final String? imageUrl; // Allow imageUrl to be nullable
+  final String? imageUrl;
   final String tag;
   final String time;
   final String title;
@@ -43,14 +43,8 @@ class TrandingCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
                   imageUrl ??
-                      'https://via.placeholder.com/150', // Default image
+                      "https://imgs.search.brave.com/AVzxm2MWMs-HNk8xITbUtoyq8FysFmSwV727K4_GOog/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9tb3Rvci15YWNo/dC1zYWlsaW5nLWlu/LXRoZS1zZWEtYWVy/aWFsLXZpZXctZnJl/ZS1pbWFnZS5qcGVn/P3c9NjAwJnF1YWxp/dHk9ODA",
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      'assets/images/default_image.png', // Local fallback image
-                      fit: BoxFit.cover,
-                    );
-                  },
                 ),
               ),
             ),
@@ -74,9 +68,8 @@ class TrandingCard extends StatelessWidget {
                 Flexible(
                   child: Text(
                     title,
-                    maxLines: 2, // Limit title to 2 lines
-                    overflow:
-                        TextOverflow.ellipsis, // Add ellipsis if text overflows
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -96,9 +89,8 @@ class TrandingCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     author,
-                    overflow: TextOverflow
-                        .ellipsis, // Handle overflow for author name
-                    maxLines: 1, // Limit to 1 line
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                     style: TextStyle(
                       fontSize: 16,
                     ),

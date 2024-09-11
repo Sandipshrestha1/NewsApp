@@ -20,7 +20,6 @@ class HomePage extends StatelessWidget {
             children: [
               SizedBox(height: 40),
 
-              // Header Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -59,7 +58,6 @@ class HomePage extends StatelessWidget {
                 ],
               ),
 
-              // Hottest News Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -87,13 +85,16 @@ class HomePage extends StatelessWidget {
                                   .map(
                                     (e) => TrandingCard(
                                       ontap: () {
-                                        Get.to(() => NewsDetailsPage(news: e));
+                                        if (e != null) {
+                                          Get.to(
+                                              () => NewsDetailsPage(news: e));
+                                        }
                                       },
                                       imageUrl: e.urlToImage ??
                                           "https://imgs.search.brave.com/3iJVbYB2lmqynToA4f0fFWKxfun18j-ypAnXpCZpBJE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE5LzE1Lzg5/LzM2MF9GXzIxOTE1/ODk2OV9rdjJzN1JF/cTZBN2FyWDZuOVRY/NnR0Nkg5Zzd1dWpZ/VS5qcGc",
                                       tag: "Trending No: 1",
                                       time: e.publishedAt.toString(),
-                                      title: e.title,
+                                      title: e.title ?? "No Title",
                                       author: e.author ?? "Unknown",
                                     ),
                                   )
@@ -103,8 +104,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-
-              // News for You Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -124,16 +123,19 @@ class HomePage extends StatelessWidget {
               Obx(
                 () => newsController.isnewsForYouListListLoading.value
                     ? CircularProgressIndicator()
-                    : newsController.fiveNewsOnly.isNotEmpty
+                    : newsController.newsForYouList.isNotEmpty
                         ? Column(
-                            children: newsController.fiveNewsOnly
+                            children: newsController.newsForYouList
                                 .map((e) => NewsTile(
                                       ontap: () {
-                                        Get.to(() => NewsDetailsPage(news: e));
+                                        if (e != null) {
+                                          Get.to(
+                                              () => NewsDetailsPage(news: e));
+                                        }
                                       },
                                       imageUrl: e.urlToImage ??
-                                          "https://via.placeholder.com/150",
-                                      title: e.title,
+                                          "https://imgs.search.brave.com/3iJVbYB2lmqynToA4f0fFWKxfun18j-ypAnXpCZpBJE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE5LzE1Lzg5/LzM2MF9GXzIxOTE1/ODk2OV9rdjJzN1JF/cTZBN2FyWDZuOVRY/NnR0Nkg5Zzd1dWpZ/VS5qcGc",
+                                      title: e.title ?? "No Title",
                                       time: e.publishedAt.toString(),
                                       author: e.author ?? "Unknown",
                                     ))

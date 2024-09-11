@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:newapp/Model/NewsModel.dart';
 
 class NewsDetailsPage extends StatelessWidget {
@@ -16,7 +15,7 @@ class NewsDetailsPage extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
@@ -24,53 +23,67 @@ class NewsDetailsPage extends StatelessWidget {
                       onTap: () {
                         Get.back();
                       },
-                      child: Container(
-                        child: Row(
-                          children: [
-                            Icon(Icons.arrow_back_ios_new),
-                            Text("Back"),
-                          ],
-                        ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.arrow_back_ios_new),
+                          SizedBox(width: 5),
+                          Text("Back"),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Container(
-                  // height: 300,
                   decoration: BoxDecoration(
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            news.urlToImage ??
-                                "https://imgs.search.brave.com/3iJVbYB2lmqynToA4f0fFWKxfun18j-ypAnXpCZpBJE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE5LzE1Lzg5/LzM2MF9GXzIxOTE1/ODk2OV9rdjJzN1JF/cTZBN2FyWDZuOVRY/NnR0Nkg5Zzd1dWpZ/VS5qcGc",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      news.urlToImage ??
+                          "https://imgs.search.brave.com/AVzxm2MWMs-HNk8xITbUtoyq8FysFmSwV727K4_GOog/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9tb3Rvci15YWNo/dC1zYWlsaW5nLWlu/LXRoZS1zZWEtYWVy/aWFsLXZpZXctZnJl/ZS1pbWFnZS5qcGVn/P3c9NjAwJnF1YWxp/dHk9ODA",
+                      fit: BoxFit.cover,
+                      height: 200,
+                      width: double.infinity,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Icon(Icons.error, color: Colors.red),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  news.title,
+                  news.title ?? "No Title",
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 10),
                 Row(
                   children: [
-                    Text(
-                      "${news.author}  * ${news.publishedAt}",
-                      style: Theme.of(context).textTheme.labelSmall,
+                    Expanded(
+                      child: Text(
+                        "${news.author ?? "Unknown Author"} * ${news.publishedAt ?? "No Date"}",
+                        style: Theme.of(context).textTheme.labelSmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
@@ -81,33 +94,33 @@ class NewsDetailsPage extends StatelessWidget {
                       radius: 15,
                       backgroundColor: Colors.red,
                       child: Text(
-                        news.author![0],
+                        news.author?.isNotEmpty == true ? news.author![0] : "A",
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                     SizedBox(width: 10),
-                    Text(
-                      news.author!,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                    Expanded(
+                      child: Text(
+                        news.author ?? "Unknown Author",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
                 SizedBox(height: 20),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        news.description!,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                        ),
-                      ),
-                    ),
-                  ],
+                Text(
+                  news.description ?? "No Description Available",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                  ),
+                  textAlign: TextAlign.justify,
                 ),
               ],
             ),

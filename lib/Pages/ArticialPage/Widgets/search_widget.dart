@@ -2,15 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newapp/Controller/News_controller.dart';
 
-class SearchWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
   const SearchWidget({super.key});
 
   @override
+  _SearchWidgetState createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  late NewsController newsController;
+  late TextEditingController searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    newsController = Get.find<NewsController>();
+    searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    NewsController newsController = Get.put(NewsController());
-
-    TextEditingController searchController = TextEditingController();
-
     return Container(
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -24,7 +41,6 @@ class SearchWidget extends StatelessWidget {
               controller: searchController,
               decoration: InputDecoration(
                 hintText: "Search news ...",
-                //  prefixIcon: Icon(Icons.search),
                 fillColor: Theme.of(context).colorScheme.primaryContainer,
                 border: InputBorder.none,
               ),
@@ -42,7 +58,8 @@ class SearchWidget extends StatelessWidget {
                     ),
                     child: CircularProgressIndicator(
                       color: Colors.white,
-                    ))
+                    ),
+                  )
                 : InkWell(
                     onTap: () {
                       newsController.searchNews(searchController.text);
@@ -56,6 +73,7 @@ class SearchWidget extends StatelessWidget {
                       ),
                       child: Icon(
                         Icons.search,
+                        color: Colors.white,
                       ),
                     ),
                   ),

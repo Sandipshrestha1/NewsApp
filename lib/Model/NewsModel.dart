@@ -39,8 +39,6 @@ class NewsModel {
         publishedAt: publishedAt ?? this.publishedAt,
         content: content ?? this.content,
       );
-
-  // Correct implementation of fromJson
   static NewsModel fromJson(Map<String, dynamic> json) {
     return NewsModel(
       source: Source.fromJson(json['source']),
@@ -54,7 +52,6 @@ class NewsModel {
     );
   }
 
-  // toJson method can be added if needed for reverse operation
   Map<String, dynamic> toJson() => {
         'source': source.toJson(),
         'author': author,
@@ -84,8 +81,6 @@ class Source {
         id: id ?? this.id,
         name: name ?? this.name,
       );
-
-  // Correct implementation of fromJson
   static Source fromJson(Map<String, dynamic> json) {
     return Source(
       id: json['id'] as String?, // Can be null

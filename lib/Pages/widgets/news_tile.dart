@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NewsTile extends StatelessWidget {
-  final String imageUrl;
+  final String? imageUrl;
   final String title;
   final String time;
   final String author;
@@ -30,12 +30,9 @@ class NewsTile extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image container
             Container(
-              width: MediaQuery.of(context).size.width *
-                  0.3, // Dynamically set width
-              height: MediaQuery.of(context).size.width *
-                  0.3, // Match height to width
+              width: MediaQuery.of(context).size.width * 0.3,
+              height: MediaQuery.of(context).size.width * 0.3,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(20),
@@ -43,23 +40,20 @@ class NewsTile extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                  imageUrl,
+                  imageUrl ??
+                      "https://imgs.search.brave.com/AVzxm2MWMs-HNk8xITbUtoyq8FysFmSwV727K4_GOog/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9tb3Rvci15YWNo/dC1zYWlsaW5nLWlu/LXRoZS1zZWEtYWVy/aWFsLXZpZXctZnJl/ZS1pbWFnZS5qcGVn/P3c9NjAwJnF1YWxp/dHk9ODA",
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.error,
-                        color: Colors.red); // Show error icon if image fails
+                    return Icon(Icons.error, color: Colors.red);
                   },
                 ),
               ),
             ),
             SizedBox(width: 10),
-
-            // Content column
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Author Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -80,8 +74,6 @@ class NewsTile extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 10),
-
-                  // Title text
                   Text(
                     title,
                     maxLines: 2,
@@ -89,8 +81,6 @@ class NewsTile extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 5),
-
-                  // Time text
                   Text(
                     time,
                     style: Theme.of(context).textTheme.labelSmall,
