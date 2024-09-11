@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:newapp/Pages/HomePage/home_page.dart';
+import 'package:newapp/Pages/home_page_controller.dart';
 
 import 'Config/theme.dart';
 
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: "News App",
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: HomePage(),
+      home: HomePageController(),
     );
   }
 }

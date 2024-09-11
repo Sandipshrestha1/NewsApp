@@ -1,27 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:newapp/Components/NavigationBar/navigation_bar.dart';
-
-import 'widgets/news_tile.dart';
-import 'widgets/tranding_card.dart';
+import 'package:get/get.dart';
+import 'package:newapp/Controller/News_controller.dart';
+import 'package:newapp/Pages/NewsDetail/news_details.dart';
+import '../widgets/news_tile.dart';
+import '../widgets/tranding_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    NewsController newsController = Get.put(NewsController());
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "News Seekers",
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-      ),
-      floatingActionButton: MyButtonNav(),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 40),
+
+              // Header Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Icon(Icons.dashboard),
+                  ),
+                  Text(
+                    "NEWS APP",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      newsController.trendingNewsList();
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Icon(Icons.person),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Hottest News Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -35,35 +73,38 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 20,
-              ),
-              const SingleChildScrollView(
+              SizedBox(height: 20),
+
+              // Trending News Horizontal Scroll
+              SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    TrandingCard(
-                      imageUrl:
-                          "https://imgs.search.brave.com/3iJVbYB2lmqynToA4f0fFWKxfun18j-ypAnXpCZpBJE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE5LzE1Lzg5/LzM2MF9GXzIxOTE1/ODk2OV9rdjJzN1JF/cTZBN2FyWDZuOVRY/NnR0Nkg5Zzd1dWpZ/VS5qcGc",
-                      title: "Save water for future",
-                      author: "Sandip shrestha",
-                      tag: "Tranding no 1",
-                      time: "2 days ago",
-                    ),
-                    TrandingCard(
-                      imageUrl:
-                          "https://imgs.search.brave.com/ItiCqVcGF90vFXj-UR-xkVUn5RsuxqFqwthDkUDwwbw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNTA1/NDk2OTYyL3Bob3Rv/L2ZyZXNoLWdyZWVu/LWxlYXZlcy5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9Y1R6/djUtNzc3bDh4TXRv/OW40dXhtMjVtU0Jw/Rlc2RThaQ1NpWnZL/UGRlND0",
-                      title: "Spring Season",
-                      author: " shrestha",
-                      tag: "Tranding no 2",
-                      time: "1 days ago",
-                    ),
-                  ],
+                child: Obx(
+                  () => newsController.istrendingNewsListLoading.value
+                      ? CircularProgressIndicator()
+                      : newsController.trendingNewsList.isNotEmpty
+                          ? Row(
+                              children: newsController.trendingNewsList
+                                  .map(
+                                    (e) => TrandingCard(
+                                      ontap: () {
+                                        Get.to(() => NewsDetailsPage(news: e));
+                                      },
+                                      imageUrl: e.urlToImage ??
+                                          "https://imgs.search.brave.com/3iJVbYB2lmqynToA4f0fFWKxfun18j-ypAnXpCZpBJE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE5LzE1Lzg5/LzM2MF9GXzIxOTE1/ODk2OV9rdjJzN1JF/cTZBN2FyWDZuOVRY/NnR0Nkg5Zzd1dWpZ/VS5qcGc",
+                                      tag: "Trending No: 1",
+                                      time: e.publishedAt.toString(),
+                                      title: e.title,
+                                      author: e.author ?? "Unknown",
+                                    ),
+                                  )
+                                  .toList(),
+                            )
+                          : Center(child: Text("No trending news available.")),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
+
+              // News for You Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -77,33 +118,28 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Column(
-                children: [
-                  NewsTile(
-                    imageUrl:
-                        "https://imgs.search.brave.com/3iJVbYB2lmqynToA4f0fFWKxfun18j-ypAnXpCZpBJE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE5LzE1Lzg5/LzM2MF9GXzIxOTE1/ODk2OV9rdjJzN1JF/cTZBN2FyWDZuOVRY/NnR0Nkg5Zzd1dWpZ/VS5qcGc",
-                    title: "Save water for future",
-                    author: "Sandip shrestha",
-                    time: "2 days ago",
-                  ),
-                  NewsTile(
-                    imageUrl:
-                        "https://imgs.search.brave.com/ItiCqVcGF90vFXj-UR-xkVUn5RsuxqFqwthDkUDwwbw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNTA1/NDk2OTYyL3Bob3Rv/L2ZyZXNoLWdyZWVu/LWxlYXZlcy5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9Y1R6/djUtNzc3bDh4TXRv/OW40dXhtMjVtU0Jw/Rlc2RThaQ1NpWnZL/UGRlND0",
-                    title: "Spring Season",
-                    author: " shrestha",
-                    time: "1 days ago",
-                  ),
-                  NewsTile(
-                    imageUrl:
-                        "https://imgs.search.brave.com/3iJVbYB2lmqynToA4f0fFWKxfun18j-ypAnXpCZpBJE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAyLzE5LzE1Lzg5/LzM2MF9GXzIxOTE1/ODk2OV9rdjJzN1JF/cTZBN2FyWDZuOVRY/NnR0Nkg5Zzd1dWpZ/VS5qcGc",
-                    title: "Save water for future",
-                    author: "Sandip shrestha",
-                    time: "2 days ago",
-                  )
-                ],
+              SizedBox(height: 20),
+
+              // News for You List
+              Obx(
+                () => newsController.isnewsForYouListListLoading.value
+                    ? CircularProgressIndicator()
+                    : newsController.fiveNewsOnly.isNotEmpty
+                        ? Column(
+                            children: newsController.fiveNewsOnly
+                                .map((e) => NewsTile(
+                                      ontap: () {
+                                        Get.to(() => NewsDetailsPage(news: e));
+                                      },
+                                      imageUrl: e.urlToImage ??
+                                          "https://via.placeholder.com/150",
+                                      title: e.title,
+                                      time: e.publishedAt.toString(),
+                                      author: e.author ?? "Unknown",
+                                    ))
+                                .toList(),
+                          )
+                        : Center(child: Text("No news available for you.")),
               ),
             ],
           ),

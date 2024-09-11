@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/route_manager.dart';
 import 'package:newapp/Controller/BottomNavigationController/bottom_navigation_controller.dart';
 
 class MyButtonNav extends StatelessWidget {
